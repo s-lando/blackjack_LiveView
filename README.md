@@ -17,8 +17,11 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
 
+## Draft Multiplayer Blackjack Architecture
 
-## Game Server States
+![link](../blackjack/priv/static/images/blackjack_liveview_architecture.png)
+
+## Draft Game Server States
 
 1. No players has taken a seat, no game in progress, no previous games
 * note: there might be lots of players watching on the side line aka: client connections established
@@ -65,11 +68,11 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   playerId: ,
   player_name: random_name
   cards: [],
+
 }
 
 ```
 
-### Dealer state
 
 
 
