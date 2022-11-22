@@ -19,7 +19,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Draft Multiplayer Blackjack Architecture
 
-![link](../blackjack/priv/static/images/blackjack_liveview_architecture.png)
+![link](./priv/static/images/blackjack_liveview_architecture.png)
 
 ## Draft Game Server States
 
