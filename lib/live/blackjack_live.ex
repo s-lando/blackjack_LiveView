@@ -15,18 +15,46 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
+  def handle_event("hit", params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("stand", params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("seat", params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("leave_seat", params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("start_game", params, socket) do
+    {:noreply, socket}
+  end
+
+  # test only #############################
+  @impl true
   def handle_event("test_click", _value, socket) do
     existing_cards = socket.assigns.cards
     {:ok, new_cards} = GameServer.deal(2)
     {:noreply, assign(socket, cards: existing_cards ++ new_cards)}
   end
 
+  # Test only
   @impl true
   def handle_info(%{event: "testing", payload: message}, socket) do
     Logger.info("Received #{message} from GameServer broadcast")
     {:noreply, assign(socket, cards: [])}
   end
 
+  # helper functions to render to view
   defp rank_to_string(rank) do
     case rank do
       :ace -> "a"
