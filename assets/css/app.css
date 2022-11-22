@@ -1,5 +1,32 @@
 /* This file is for your main application CSS */
 @import "./phoenix.css";
+@import "./cards.css";
+
+/* you can put your styles in here */
+
+.blackjack-container-common {
+  border: 1px solid rgb(158, 157, 157);
+  border-radius: 10px;
+  padding: 1em 2em 1em 2em;
+}
+
+.dealer-container {
+  display: flex;
+
+}
+
+.dealer-info {
+  padding: 1em 2em 3em 1em;
+}
+
+.gap {
+  width: 100px;
+  height: 100px;
+}
+
+.player-container {
+  margin-bottom: 2em;
+}
 
 /* Alerts and form errors used by phx.new */
 .alert {

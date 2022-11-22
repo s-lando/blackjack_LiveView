@@ -16,3 +16,60 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+
+## Game Server States
+
+1. No players has taken a seat, no game in progress, no previous games
+* note: there might be lots of players watching on the side line aka: client connections established
+
+```
+{
+  dealer: { cards: []}
+  players: list of players - empty - holds just the player id?
+  totalSeatsRemaining: 3
+  cards: full deck of 52 cards
+  isGameInProgress: false
+  completedGames: 0 // track the number of games played
+  seat1: nil // holds the entire player state?
+  seat2: nil
+  seat3: nil
+}
+
+```
+
+2. 2 player have taken a seat, no game start yet, no previous games, (start game button is visible now)
+
+```
+
+{
+  dealer: { cards: []}
+  players: []
+  totalSeatsRemaining: 2
+  cards: full deck of 52 cards
+  isGameInProgress: false
+  completedGames: 0 // track the number of games played
+  seat1: {}
+  seat2: {}
+  seat3: nil
+}
+
+```
+
+3. game started, and is waiting for 
+
+### Player state
+
+```
+{
+  playerId: ,
+  player_name: random_name
+  cards: [],
+}
+
+```
+
+### Dealer state
+
+
+

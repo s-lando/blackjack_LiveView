@@ -13,9 +13,10 @@ defmodule Blackjack.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Blackjack.PubSub},
       # Start the Endpoint (http/https)
-      BlackjackWeb.Endpoint
+      BlackjackWeb.Endpoint,
       # Start a worker by calling: Blackjack.Worker.start_link(arg)
       # {Blackjack.Worker, arg}
+      GameServer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

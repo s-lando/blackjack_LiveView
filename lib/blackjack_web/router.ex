@@ -18,6 +18,7 @@ defmodule BlackjackWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/blackjack_live", BlackjackLive
   end
 
   # Other scopes may use custom stacks.

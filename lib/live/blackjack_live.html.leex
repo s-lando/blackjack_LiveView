@@ -1,0 +1,41 @@
+<h2>Blackjack</h2>
+<div class="blackjack-container-common dealer-container">
+    <div class="dealer-info">
+        <div>Dealer</div>
+        <!-- if game state is :no-game-in-progress - don't display score-->
+        <div>score</div>
+    </div>
+
+    <div class="playingCards simpleCards">
+        <div class="card rank-7 spades">
+            <span class="rank"><%= rank_to_string(:ace) %></span>
+            <span class="suit"></span>
+        </div>
+        <div class="card back">*</div>
+    </div>
+</div>
+<div class="gap">
+
+<!-- shows game result information and start game button -->
+
+</div>
+
+<div class="blackjack-container-common player-container">
+   <div class="playingCards simpleCards">
+    <%= for {rank, suite} <- @cards do %>
+        <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
+            <span class="rank"><%= rank_to_string(rank)%></span>
+            <span class="suit"></span>
+        </div>
+    <% end %>
+    <button phx-click="test_click">hit</button>
+   </div>
+</div>
+
+<div class="blackjack-container-common player-container">
+   <p>Click to take a seat</p>
+</div>
+
+<div class="blackjack-container-common player-container">
+   <p>Click to take a seat</p>
+</div>
