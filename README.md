@@ -59,18 +59,17 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ```
 
-3. game started, and is waiting for 
+3. game started, and is waiting for player1 to choose what he wants to do. Perhaps we need an additional field to know who's turn it is? 
 
-### Player state
+### Player state (the assigns field of the socket)
 
 ```
 {
-  playerId: ,
+  playerId: nil,
   player_name: random_name
   cards: [],
-
+  gameState: GameServer.get_state()
 }
-
 ```
 
 
