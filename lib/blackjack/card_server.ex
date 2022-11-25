@@ -72,8 +72,8 @@ defmodule CardServer do
   @impl true
   def handle_call({:deal, n}, _from, state) do
     cond do
-      is_number(n) == false -> {:reply, {:ok, []}, state}
-      n <= 0 -> {:reply, {:ok, []}, state}
+      is_number(n) == false -> {:reply, [], state}
+      n <= 0 -> {:reply, [], state}
       n > Enum.count(state) ->
         # We don't want the deck to be depleted so will add to the deck with a new one
         # when the card count is less than what user asks for
@@ -103,6 +103,6 @@ defmodule CardServer do
 
   defp deal_cards(current_deck, number_of_cards) do
     {dealt_deck, updated_deck} = Enum.split(current_deck, number_of_cards)
-    {:reply, {:ok, dealt_deck}, updated_deck}
+    {:reply, dealt_deck, updated_deck}
   end
 end

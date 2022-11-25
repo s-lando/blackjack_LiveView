@@ -27,6 +27,9 @@ defmodule BlackjackWeb.BlackjackLive do
 
   @impl true
   def handle_event("seat", params, socket) do
+    player_id = "need to get this value from the frontend"
+    GameServer.sit(socket.assigns.player_id, player_id)
+    BlackjackWeb.Endpoint.broadcast()
     {:noreply, socket}
   end
 
@@ -40,19 +43,9 @@ defmodule BlackjackWeb.BlackjackLive do
     {:noreply, socket}
   end
 
-  # test only #############################
   @impl true
-  def handle_event("test_click", _value, socket) do
-    existing_cards = socket.assigns.cards
-    {:ok, new_cards} = GameServer.deal(2)
-    {:noreply, assign(socket, cards: existing_cards ++ new_cards)}
-  end
-
-  # Test only
-  @impl true
-  def handle_info(%{event: "testing", payload: message}, socket) do
-    Logger.info("Received #{message} from GameServer broadcast")
-    {:noreply, assign(socket, cards: [])}
+  def handle_info(:game_state_change, socket) do
+    {:noreply, assign(socket, game_state: GameServer.get_game_state)}
   end
 
   # helper functions to render to view

@@ -21,10 +21,15 @@ defmodule GameServer do
 
   @impl true
   def init(nil) do
+
+    player1 = %{
+      hand: CardServer.deal(2)
+    }
+
     game_state = %{
       dealer: [],
       seat1: nil,
-      seat2: nil,
+      seat2: player1,
       seat3: nil,
       cards: CardServer.get_remaining_deck,
       game_in_progress: false,
