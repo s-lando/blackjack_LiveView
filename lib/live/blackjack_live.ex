@@ -10,8 +10,9 @@ defmodule BlackjackWeb.BlackjackLive do
     if connected?(socket),
     do: BlackjackWeb.Endpoint.subscribe("game_state")
 
-    {:ok, cards} = GameServer.deal(2)
-    {:ok, assign(socket, cards: cards)}
+    game_state = GameServer.get_game_state()
+
+    {:ok, assign(socket, player_id: socket.id , game_state: game_state)}
   end
 
   @impl true

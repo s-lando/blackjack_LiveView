@@ -2,27 +2,29 @@
 <div class="blackjack-container-common dealer-container">
     <div class="dealer-info">
         <div>Dealer</div>
-        <!-- if game state is :no-game-in-progress - don't display score-->
-        <div>score</div>
-    </div>
 
-    <div class="playingCards simpleCards">
-        <div class="card rank-7 spades">
-            <span class="rank"><%= rank_to_string(:ace) %></span>
+        <div>score</div>
+        <div class="playingCards simpleCards">
+          <%= for {rank, suite} <- @game_state.dealer do %>
+        <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
+            <span class="rank"><%= rank_to_string(rank)%></span>
             <span class="suit"></span>
         </div>
-        <div class="card back">*</div>
+    <% end %>
+        </div>
     </div>
+
 </div>
 <div class="gap">
 
+<p> You are player number <%= @player_id %></p>
 <!-- shows game result information and start game button -->
 
 </div>
 
 <div class="blackjack-container-common player-container">
    <div class="playingCards simpleCards">
-    <%= for {rank, suite} <- @cards do %>
+    <%= for {rank, suite} <- @game_state.cards do %>
         <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
             <span class="rank"><%= rank_to_string(rank)%></span>
             <span class="suit"></span>
@@ -32,7 +34,7 @@
    </div>
 </div>
 
-<div class="blackjack-container-common player-container">
+<div phx-click="seat" class="blackjack-container-common player-container">
    <p>Click to take a seat</p>
 </div>
 
