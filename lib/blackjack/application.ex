@@ -16,6 +16,7 @@ defmodule Blackjack.Application do
       BlackjackWeb.Endpoint,
       # Start a worker by calling: Blackjack.Worker.start_link(arg)
       # {Blackjack.Worker, arg}
+      CardServer,
       GameServer
     ]
 
