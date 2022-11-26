@@ -1,5 +1,6 @@
 defmodule GameServer do
   use GenServer
+  require Logger
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
@@ -22,14 +23,10 @@ defmodule GameServer do
   @impl true
   def init(nil) do
 
-    player1 = %{
-      hand: CardServer.deal(2)
-    }
-
     game_state = %{
       dealer: [],
       seat1: nil,
-      seat2: player1,
+      seat2: nil,
       seat3: nil,
       cards: CardServer.get_remaining_deck,
       game_in_progress: false,
@@ -44,9 +41,16 @@ defmodule GameServer do
     {:reply, state, state}
   end
 
+  # seat id is an atom e.g. :seat1
   @impl true
   def handle_cast({:sit, player_id, seat_id}, state) do
-    {:noreply, state}
+    player = %{
+      playerID: player_id,
+      hand: [],
+      hand_value: 0
+    }
+    Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
+    {:noreply, Map.put(state, seat_id, player)}
   end
 
   @impl true
