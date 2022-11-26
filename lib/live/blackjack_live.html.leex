@@ -1,4 +1,8 @@
 <h2>Blackjack</h2>
+
+<h3>Welcome <%= @playerID %></h3>
+<!-- DEALER SECTION BELOW -->
+
 <div class="blackjack-container-common dealer-container">
     <div class="dealer-info">
         <div>Dealer</div>
@@ -15,33 +19,55 @@
     </div>
 
 </div>
+
+<!-- RESULT AND START GAME SECTION -->
+
 <div class="gap">
 
-<p> You are player number <%= @player_id %></p>
-<!-- shows game result information and start game button -->
+    <!-- shows game result information -->
+
+    <!-- only show the Start Game button when at least one player has taken a seat and if game is not in progress -->
+    <%= if (@game_state.seat1 != nil || @game_state.seat2 != nil || @game_state.seat3 != nil) && @game_state.game_in_progress == false do %>
+        <button phx-click="start_round">Start Game</button>
+    <% end %>
+
+<!-- PLAYER SECTION -->
 
 </div>
 
 <%= for i <- 1..3 do %>
-<%= if @game_state[:"seat#{i}"] == nil do %>
-    <div phx-click="seat" class="blackjack-container-common player-container">
-    <p>Click to take a seat</p>
-    </div>
-<% else %>
+    <%= if @game_state[:"seat#{i}"] == nil do %>
 
-<div class="blackjack-container-common player-container">
-    <div class="playingCards simpleCards">
-        <%= for {rank, suite} <- @game_state[:"seat#{i}"][:hand] do %>
-            <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
-                <span class="rank"><%= rank_to_string(rank)%></span>
-                <span class="suit"></span>
-            </div>
-        <% end %>
-        <div class="button-container">
-            <button phx-click="hit">hit</button>
-            <button phx-click="stand">stand</button>
+        <div phx-click="seat" phx-value-seatid="<%= :"seat#{i}" %>" class="blackjack-container-common player-container">
+        <p>Click to take a seat</p>
         </div>
-    </div>
-    </div>
+
+    <% else %>
+
+        <div class="blackjack-container-common player-container">
+
+            <div>Name: <%= @game_state[:"seat#{i}"][:playerID] %></div>
+
+            <div class="playingCards simpleCards">
+                <%= for {rank, suite} <- @game_state[:"seat#{i}"][:hand] do %>
+                    <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
+                        <span class="rank"><%= rank_to_string(rank)%></span>
+                        <span class="suit"></span>
+                    </div>
+                <% end %>
+            </div>
+
+            <div class="button-container">
+                <%= if @game_state.game_in_progress == false do %>
+                    <%= if @game_state.turn == i do %>
+                        <button phx-click="hit">hit</button>
+                        <button phx-click="stand">stand</button>
+                <% else %>
+                        <button phx-click="leave_seat">Leave seat</button>
+                <% end %>
+            </div>
+
+        </div>
+    <% end %>
 <% end %>
 <% end %>

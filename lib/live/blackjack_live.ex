@@ -12,7 +12,7 @@ defmodule BlackjackWeb.BlackjackLive do
 
     game_state = GameServer.get_game_state()
 
-    {:ok, assign(socket, player_id: socket.id , game_state: game_state)}
+    {:ok, assign(socket, playerID: socket.id , game_state: game_state)}
   end
 
   @impl true
@@ -26,10 +26,9 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
-  def handle_event("seat", params, socket) do
-    player_id = "need to get this value from the frontend"
-    GameServer.sit(socket.assigns.player_id, player_id)
-    BlackjackWeb.Endpoint.broadcast()
+  def handle_event("seat", %{"seatid" => seat_id}, socket) do
+    GameServer.sit(socket.assigns.playerID, String.to_atom(seat_id))
+    BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
   end
 
@@ -39,13 +38,24 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
-  def handle_event("start_game", params, socket) do
+  def handle_event("start_round", params, socket) do
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info(:game_state_change, socket) do
-    {:noreply, assign(socket, game_state: GameServer.get_game_state)}
+  def handle_info(%{event: "game_state_change", payload: _}, socket) do
+    Logger.info("game state updated")
+    game_state_new = GameServer.get_game_state()
+    Logger.info(game_state_new)
+    {:noreply, assign(socket, game_state: game_state_new)}
+  end
+
+  @impl true
+  def terminate(reason, socket) do
+    Logger.info("#{inspect(reason)}")
+    Logger.info(socket.assigns.playerID)
+    # When a user disconnects, they should automatically call GameServer.leave
+    # api - to add this once api is available
   end
 
   # helper functions to render to view
