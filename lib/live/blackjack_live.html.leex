@@ -58,16 +58,18 @@
             </div>
 
             <div class="button-container">
-                <%= if @game_state.game_in_progress == false do %>
+               <%= if @game_state.game_in_progress == false do %>
+                   <button phx-click="leave_seat">Leave seat</button>
+               <% else %>
                     <%= if @game_state.turn == i do %>
                         <button phx-click="hit">hit</button>
                         <button phx-click="stand">stand</button>
-                <% else %>
-                        <button phx-click="leave_seat">Leave seat</button>
-                <% end %>
+                    <% else %>
+                    <div>Wait!</div>
+                    <% end %>
+               <% end %>
             </div>
 
         </div>
     <% end %>
-<% end %>
 <% end %>

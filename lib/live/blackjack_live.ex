@@ -39,7 +39,10 @@ defmodule BlackjackWeb.BlackjackLive do
 
   @impl true
   def handle_event("start_round", params, socket) do
+    GameServer.start_round()
+    BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
+  
   end
 
   @impl true
@@ -56,6 +59,8 @@ defmodule BlackjackWeb.BlackjackLive do
     Logger.info(socket.assigns.playerID)
     # When a user disconnects, they should automatically call GameServer.leave
     # api - to add this once api is available
+    # suggest that GameServer.leave takes seatId instead of playerId so
+    # server side can just update seatId to nil
   end
 
   # helper functions to render to view

@@ -47,7 +47,8 @@ defmodule GameServer do
     player = %{
       playerID: player_id,
       hand: [],
-      hand_value: 0
+      hand_value: 0,
+      hand_value_option2: %{}
     }
     Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
     {:noreply, Map.put(state, seat_id, player)}
@@ -55,7 +56,53 @@ defmodule GameServer do
 
   @impl true
   def handle_cast(:start_round, state) do
-    {:noreply, state}
+
+    new_state = state |>
+    Map.put(:game_in_progress, true) |>
+    Map.put(:dealer, CardServer.deal(2)) |>
+    Map.put(:turn, 1) |>
+    update_seated_player_state(:seat1) |>
+    update_seated_player_state(:seat2) |>
+    update_seated_player_state(:seat3) |>
+    Map.put(:cards, CardServer.get_remaining_deck)
+
+    {:noreply, new_state}
+  end
+
+  defp update_seated_player_state(game_state, seatId) do
+    cards_dealt = CardServer.deal(2)
+    case Map.get(game_state, seatId) do
+      nil -> game_state
+      %{:hand => existing_hand} = player ->
+         updated_hand = existing_hand ++ cards_dealt
+         p = player |>
+         Map.put(:hand, updated_hand) |>
+         Map.put(:hand_value_option2, get_value_of_hand(updated_hand))
+         Map.put(game_state, seatId, p)
+    end
+  end
+
+  # source this function from:
+  # https://github.com/dorilla/live_view_black_jack/blob/master/lib/black_jack_web/game_manager/manager.ex
+  # @returns: a map of 2 value options based on card combo: %{option_1: int, option_2: int}
+  def get_value_of_hand(hand) do
+    Enum.reduce(hand, %{option_1: 0, option_2: 0}, fn card, acc ->
+      %{option_1: acc1, option_2: acc2} = acc
+      %{option_1: get_value_of_card(card) + acc1, option_2: get_value_of_card(card, true) + acc2}
+    end)
+  end
+
+  def get_value_of_card({rank, _suit}, ace_2 \\ false) do
+    case is_atom(rank) do
+      true ->
+        case rank do
+          :ace -> if ace_2, do: 11, else: 1
+          :jack -> 10
+          :queen -> 10
+          :king -> 10
+        end
+      false -> rank
+    end
   end
 
 end
