@@ -117,6 +117,47 @@ defmodule GameServer do
     end
   end
 
+  @impl true
+  def handle_cast({:stand, _seat_id}, state) do
+    new_state =
+      state
+      |> Map.put(:turn, state.turn + 1)
+
+    {:noreply, new_state}
+  end
+
+  ## after player turns, would be called repeatedly until game is over
+  ## (maybe every once every second?), rerendering for each card dealt
+  @impl true
+  def handle_cast(:dealer_action, state) do
+    dealer_hand_value = state.dealer |> get_highest_value_of_hand()
+
+    if dealer_hand_value >= 17 do
+      new_state =
+        state
+        |> Map.put(:game_in_progress, false)
+        |> Map.put(:completed_games, state.completed_games + 1)
+
+      ## todo: set winners and losers for that round here
+
+      {:noreply, new_state}
+    else
+      new_state = Map.put(state, :dealer, state.dealer ++ CardServer.deal())
+
+      {:noreply, new_state}
+    end
+  end
+
+  def get_highest_value_of_hand(hand) do
+    hand_value = get_value_of_hand(hand)
+
+    if hand_value.option_2 > 21 do
+      hand_value.option_1
+    else
+      hand_value.option_2
+    end
+  end
+
   defp update_seated_player_state(game_state, seatId) do
     cards_dealt = CardServer.deal(2)
 
