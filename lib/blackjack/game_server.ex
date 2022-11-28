@@ -67,7 +67,8 @@ defmodule GameServer do
       playerID: player_id,
       hand: [],
       hand_value: 0,
-      hand_options: %{}
+      hand_options: %{},
+      result: nil
     }
 
     Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
@@ -99,7 +100,7 @@ defmodule GameServer do
     player_state = Map.put(player, :hand, new_hand)
 
     if get_value_of_hand(new_hand).option_1 > 21 do
-      player_state = Map.put(player_state, :hand_value, :bust)
+      player_state = Map.put(player_state, :result, :bust)
 
       new_state =
         state
@@ -137,14 +138,40 @@ defmodule GameServer do
         state
         |> Map.put(:game_in_progress, false)
         |> Map.put(:completed_games, state.completed_games + 1)
-
-      ## todo: set winners and losers for that round here
+        # update each player results
+        ## how to do this dynamically??
+        |> Map.put(:seat1, update_player_result(state.seat1, dealer_hand_value))
+        |> Map.put(:seat2, update_player_result(state.seat2, dealer_hand_value))
+        |> Map.put(:seat3, update_player_result(state.seat3, dealer_hand_value))
 
       {:noreply, new_state}
     else
       new_state = Map.put(state, :dealer, state.dealer ++ CardServer.deal())
 
       {:noreply, new_state}
+    end
+  end
+
+  def update_player_result(player, dealer_hand_value) do
+    player_hand_value = player.hand |> best_hand_option()
+
+    cond do
+      player_hand_value > 21 ->
+        Map.put(player, :result, :bust)
+
+      # player_hand_value == 21 ->
+      #   Map.put(player, :result, :blackjack)
+      player_hand_value > dealer_hand_value ->
+        Map.put(player, :result, :win)
+
+      player_hand_value < dealer_hand_value ->
+        Map.put(player, :result, :lose)
+
+      player_hand_value == dealer_hand_value ->
+        Map.put(player, :result, :push)
+
+      true ->
+        Map.put(player, :result, nil)
     end
   end
 
