@@ -152,6 +152,11 @@ defmodule GameServer do
     end
   end
 
+  @impl true
+  def handle_cast({:leave, seat_id}, state) do
+    {:noreply, Map.put(state, seat_id, nil)}
+  end
+
   def update_player_result(player, dealer_hand_value) do
     player_hand_value = player.hand |> best_hand_option()
 
