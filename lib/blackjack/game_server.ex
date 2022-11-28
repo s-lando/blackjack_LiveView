@@ -67,7 +67,7 @@ defmodule GameServer do
       playerID: player_id,
       hand: [],
       hand_value: 0,
-      hand_value_option2: %{}
+      hand_options: %{}
     }
 
     Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
@@ -108,8 +108,8 @@ defmodule GameServer do
 
       {:noreply, new_state}
     else
-      # do we use hand_value or just hand_value_option2?
-      player_state = Map.put(player_state, :hand_value_option2, get_value_of_hand(new_hand))
+      # do we use hand_value or just hand_options?
+      player_state = Map.put(player_state, :hand_options, get_value_of_hand(new_hand))
 
       new_state = Map.put(state, seat_id, player_state)
 
@@ -130,7 +130,7 @@ defmodule GameServer do
   ## (maybe every once every second?), rerendering for each card dealt
   @impl true
   def handle_cast(:dealer_action, state) do
-    dealer_hand_value = state.dealer |> get_highest_value_of_hand()
+    dealer_hand_value = state.dealer |> best_hand_option()
 
     if dealer_hand_value >= 17 do
       new_state =
@@ -148,7 +148,7 @@ defmodule GameServer do
     end
   end
 
-  def get_highest_value_of_hand(hand) do
+  def best_hand_option(hand) do
     hand_value = get_value_of_hand(hand)
 
     if hand_value.option_2 > 21 do
@@ -171,7 +171,7 @@ defmodule GameServer do
         p =
           player
           |> Map.put(:hand, updated_hand)
-          |> Map.put(:hand_value_option2, get_value_of_hand(updated_hand))
+          |> Map.put(:hand_options, get_value_of_hand(updated_hand))
 
         Map.put(game_state, seatId, p)
     end
