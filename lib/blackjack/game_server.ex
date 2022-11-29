@@ -85,13 +85,16 @@ defmodule GameServer do
 
   @impl true
   def handle_cast(:start_round, state) do
+
+    turn = determine_turn(state)
+
     new_state =
       state
       |> Map.put(:game_in_progress, true)
       # new deck / shuffle deck?
       # consider dealing in order of seat1, seat2, seat3, dealer, one card at at time
       |> Map.put(:dealer, CardServer.deal(2))
-      |> Map.put(:turn, 1)
+      |> Map.put(:turn, turn)
       |> update_seated_player_state(:seat1)
       |> update_seated_player_state(:seat2)
       |> update_seated_player_state(:seat3)
@@ -210,20 +213,23 @@ defmodule GameServer do
     end
   end
 
-  defp update_seated_player_state(game_state, seatId) do
-    cards_dealt = CardServer.deal(2)
+  # TODO: additional implementation required so that start_round, hit and stand can use
+  defp determine_turn(game_state) do
+    1
+  end
 
+  defp update_seated_player_state(game_state, seatId) do
+
+    hand = CardServer.deal(2)
     case Map.get(game_state, seatId) do
       nil ->
         game_state
-
-      %{:hand => existing_hand} = player ->
-        updated_hand = existing_hand ++ cards_dealt
-
+      player ->
         p =
           player
-          |> Map.put(:hand, updated_hand)
-          |> Map.put(:hand_options, get_value_of_hand(updated_hand))
+          |> Map.put(:hand, hand)
+          |> Map.put(:hand_options, get_value_of_hand(hand))
+          |> Map.put(:result, nil)
 
         Map.put(game_state, seatId, p)
     end
