@@ -160,14 +160,6 @@ defmodule GameServer do
     end
   end
 
-  # def handle_cast(:dealer_turn, state) do
-
-  # end
-
-  # def handle_call(:conclude_game, state) do
-  #   {:reply, state, state}
-  # end
-
   @impl true
   def handle_cast({:leave, seat_id}, state) do
     current_total_players = Map.get(state, :total_players)
