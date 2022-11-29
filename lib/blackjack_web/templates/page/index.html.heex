@@ -1,7 +1,18 @@
-
+<div class="header">
+    <h2>Blackjack</h2>
+</div>
 <!-- lobby before entering  -->
-<div>
-<input placeholder="player_name"/>
-<!-- using the phx-click live view listening and send the event new-game -->
-<button phx-click="new-game"> Enter Game </button>
+
+
+<div class="userInfoFormContainer">
+    <div class="enterUserInfoForm">
+        <.form let={f} for= {:user} phx-submit="new-game" id="user-form">
+        <%= label f, "Enter your name to start" %>
+        <%= text_input f, :username %>
+        <%= submit "Enter game" %>
+        </.form>
+        <!-- <label>Enter your name to start: </label>
+        <input placeholder="player_name" name ="username"/>
+        <button phx-click="new-game"> Enter Game </button> -->
+    </div>
 </div>
