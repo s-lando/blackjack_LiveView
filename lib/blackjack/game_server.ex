@@ -49,7 +49,8 @@ defmodule GameServer do
       cards: CardServer.get_remaining_deck(),
       game_in_progress: false,
       turn: 0,
-      completed_games: 0
+      completed_games: 0,
+      total_players: 0
     }
 
     {:ok, game_state}
@@ -71,8 +72,15 @@ defmodule GameServer do
       result: nil
     }
 
+    current_total_players = Map.get(state, :total_players)
+
+    new_state =
+    state
+    |> Map.put(seat_id, player)
+    |> Map.put(:total_players, current_total_players + 1)
+
     Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
-    {:noreply, Map.put(state, seat_id, player)}
+    {:noreply, new_state}
   end
 
   @impl true

@@ -23,7 +23,9 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
-  def handle_event("stand", params, socket) do
+  def handle_event("stand", %{"seatid" => seat_id}, socket) do
+    GameServer.stand(String.to_atom(seat_id))
+    BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
   end
 
@@ -51,8 +53,21 @@ defmodule BlackjackWeb.BlackjackLive do
   def handle_info(%{event: "game_state_change", payload: _}, socket) do
     Logger.info("game state updated")
     game_state_new = GameServer.get_game_state()
-    Logger.info(game_state_new)
+    current_turn = Map.get(game_state_new, :turn)
+    total_players = Map.get(game_state_new, :total_players)
+    Logger.info("Current turn: #{current_turn}, Total players: #{total_players}")
+
+    # Wait till dealer_action is fixed - Each player should keep track of their own result
+
+    # case current_turn > total_players do
+    #   true ->
+    #     GameServer.dealer_action()
+    #     {:noreply, assign(socket, game_state: GameServer.get_game_state())}
+    #   false -> {:noreply, assign(socket, game_state: game_state_new)}
+    # end
+
     {:noreply, assign(socket, game_state: game_state_new)}
+
   end
 
   @impl true
