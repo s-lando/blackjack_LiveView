@@ -33,11 +33,13 @@ defmodule BlackjackWeb.BlackjackLive do
   def handle_event("seat", %{"seatid" => seat_id}, socket) do
     GameServer.sit(socket.assigns.playerID, String.to_atom(seat_id))
     BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
-    {:noreply, socket}
+    {:noreply, assign(socket, seat: String.to_atom(seat_id))}
   end
 
   @impl true
-  def handle_event("leave_seat", params, socket) do
+  def handle_event("leave_seat", _params, socket) do
+    GameServer.leave(socket.assigns.seat)
+    BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
     {:noreply, socket}
   end
 
@@ -70,14 +72,24 @@ defmodule BlackjackWeb.BlackjackLive do
 
   end
 
+  # @impl true
+  # def handle_info(%{event: "dealer_state_change", payload: _}, socket) do
+
+  # end
+
+  def handle_info(%{event: "user_leaving_game", payload: _}, socket) do
+    {:noreply, assign(socket, seat: nil, game_state: GameServer.get_game_state)}
+  end
+
   @impl true
-  def terminate(reason, socket) do
-    Logger.info("#{inspect(reason)}")
+  def terminate({:shutdown, :closed}, socket) do
     Logger.info(socket.assigns.playerID)
-    # When a user disconnects, they should automatically call GameServer.leave
-    # api - to add this once api is available
-    # suggest that GameServer.leave takes seatId instead of playerId so
-    # server side can just update seatId to nil
+    case Map.get(socket.assigns, :seat) do
+      nil -> {:noreply, socket}
+      seat_id ->
+        GameServer.leave(seat_id)
+        BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
+    end
   end
 
   # helper functions to render to view
