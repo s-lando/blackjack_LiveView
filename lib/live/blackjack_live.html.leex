@@ -61,8 +61,6 @@
                             <div class="playingCards simpleCards">
                                 <%= for {rank, suite} <- @game_state[:"seat#{i}"][:hand] do %>
                                     <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
-                                       <!-- <span class="rank"><%= rank_to_string(rank)%></span>
-                                        <span class="suit"></span> -->
                                     </div>
                                 <% end %>
                             </div>
@@ -75,8 +73,8 @@
                         <button class= "leaveBtn" phx-click="leave_seat">Leave seat</button>
                     <% else %>
                             <%= if @game_state.turn == i do %>
-                                <button class = "hit" phx-click="hit">hit</button>
-                                <button class ="stand" phx-click="stand">stand</button>
+                                <button class = "hit" phx-value-seatid="<%= :"seat#{i}" %>" phx-click="hit">hit</button>
+                                <button class ="stand" phx-value-seatid="<%= :"seat#{i}" %>" phx-click="stand">stand</button>
                             <% else %>
                             <div>Wait!</div>
                             <% end %>
