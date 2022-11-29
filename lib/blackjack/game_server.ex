@@ -170,7 +170,7 @@ defmodule GameServer do
     new_state =
     state
     |> Map.put(seat_id, nil)
-    |> Map.put(:total_players, current_total_players + 1)
+    |> Map.put(:total_players, current_total_players - 1)
 
     {:noreply, new_state}
   end
