@@ -3,7 +3,7 @@ defmodule BlackjackWeb.BlackjackLive do
   require Logger
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     Logger.info("Mounted view")
     # subscribes all users to the game_state topic so that
     # I can handle_info for different events received from broadcast
@@ -12,7 +12,7 @@ defmodule BlackjackWeb.BlackjackLive do
 
     game_state = GameServer.get_game_state()
 
-    {:ok, assign(socket, playerID: socket.id , game_state: game_state)}
+    {:ok, assign(socket, playerID: params["name"], playerName: params["name"] , game_state: game_state)}
   end
 
   @impl true
