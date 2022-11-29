@@ -802,7 +802,7 @@
 
 }
 .card.rank-10.spades {
-    background-image: url(/images/cards/106Spade.png);
+    background-image: url(/images/cards/10Spade.png);
     background-repeat: round;
 
 }
@@ -866,7 +866,7 @@
 
 }
 .card.rank-10.diams {
-    background-image: url(/images/cards/106Diamond.png);
+    background-image: url(/images/cards/10Diamond.png);
     background-repeat: round;
 
 }

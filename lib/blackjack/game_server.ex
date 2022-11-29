@@ -173,26 +173,31 @@ defmodule GameServer do
   end
 
   def update_player_result(player, dealer_hand_value) do
-    player_hand_value = player.hand |> best_hand_option()
+    case player do
+      nil -> player
+      _ ->
+        player_hand_value = player.hand |> best_hand_option()
 
-    cond do
-      player_hand_value > 21 ->
-        Map.put(player, :result, :bust)
+        cond do
+          player_hand_value > 21 ->
+            Map.put(player, :result, :bust)
 
-      # player_hand_value == 21 ->
-      #   Map.put(player, :result, :blackjack)
-      player_hand_value > dealer_hand_value ->
-        Map.put(player, :result, :win)
+          # player_hand_value == 21 ->
+          #   Map.put(player, :result, :blackjack)
+          player_hand_value > dealer_hand_value ->
+            Map.put(player, :result, :win)
 
-      player_hand_value < dealer_hand_value ->
-        Map.put(player, :result, :lose)
+          player_hand_value < dealer_hand_value ->
+            Map.put(player, :result, :lose)
 
-      player_hand_value == dealer_hand_value ->
-        Map.put(player, :result, :push)
+          player_hand_value == dealer_hand_value ->
+            Map.put(player, :result, :push)
 
-      true ->
-        Map.put(player, :result, nil)
+          true ->
+            Map.put(player, :result, nil)
+        end
     end
+
   end
 
   def best_hand_option(hand) do
