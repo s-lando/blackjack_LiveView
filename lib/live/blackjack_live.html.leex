@@ -39,6 +39,13 @@
             <button phx-click="start_round">Start Game</button>
         <% end %>
 
+         <%= case @result do %>
+                <% nil -> %><p>Test</p>
+                <% :bust -> %><p>Busted</p>
+                <% :lose -> %><p>You lost</p>
+                <% :win -> %><p>You win</p>
+        <% end %>
+
     <!-- PLAYER SECTION -->
 
     </div>

@@ -59,23 +59,35 @@ defmodule BlackjackWeb.BlackjackLive do
     total_players = Map.get(game_state_new, :total_players)
     Logger.info("Current turn: #{current_turn}, Total players: #{total_players}")
 
-    # Wait till dealer_action is fixed - Each player should keep track of their own result
+   # Wait till dealer_action is fixed - Each player should keep track of their own result
 
-    # case current_turn > total_players do
-    #   true ->
-    #     GameServer.dealer_action()
-    #     {:noreply, assign(socket, game_state: GameServer.get_game_state())}
-    #   false -> {:noreply, assign(socket, game_state: game_state_new)}
-    # end
+    case current_turn > total_players do
+      true ->
+        case game_state_new.game_in_progress do
+          true ->
+            GameServer.dealer_action()
+            BlackjackWeb.Endpoint.broadcast!("game_state", "game_state_change", :game_state_change)
+            {:noreply, assign(socket, game_state: GameServer.get_game_state())}
+          false ->
+            BlackjackWeb.Endpoint.broadcast("game_state", "game_ended", game_state_new)
+        end
+
+      false -> {:noreply, assign(socket, game_state: game_state_new)}
+    end
 
     {:noreply, assign(socket, game_state: game_state_new)}
 
   end
 
-  # @impl true
-  # def handle_info(%{event: "dealer_state_change", payload: _}, socket) do
-
-  # end
+  @impl true
+  def handle_info(%{event: "game_ended", payload: new_game_state}, socket) do
+    Logger.info("Game has ended")
+    Logger.info("Game state")
+    Logger.info(new_game_state)
+    player_seat = socket.assigns.seat
+    result = Map.get(new_game_state, player_seat) |> Map.get(:result)
+    {:noreply, assign(socket, result: result, game_state: new_game_state)}
+  end
 
   def handle_info(%{event: "user_leaving_game", payload: _}, socket) do
     {:noreply, assign(socket, seat: nil, game_state: GameServer.get_game_state)}
@@ -90,6 +102,11 @@ defmodule BlackjackWeb.BlackjackLive do
         GameServer.leave(seat_id)
         BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
     end
+  end
+
+  def terminate(reason, socket) do
+    Logger.info(reason)
+    Logger.info("another terminate handle")
   end
 
   # helper functions to render to view
