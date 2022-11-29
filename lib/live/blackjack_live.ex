@@ -16,7 +16,9 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
-  def handle_event("hit", params, socket) do
+  def handle_event("hit", %{"seatid" => seat_id}, socket) do
+    GameServer.hit(String.to_atom(seat_id))
+    BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
   end
 
@@ -42,7 +44,7 @@ defmodule BlackjackWeb.BlackjackLive do
     GameServer.start_round()
     BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
-  
+
   end
 
   @impl true

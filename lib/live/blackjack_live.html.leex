@@ -62,7 +62,7 @@
                    <button phx-click="leave_seat">Leave seat</button>
                <% else %>
                     <%= if @game_state.turn == i do %>
-                        <button phx-click="hit">hit</button>
+                        <button phx-click="hit" phx-value-seatid="<%= :"seat#{i}" %>">hit</button>
                         <button phx-click="stand">stand</button>
                     <% else %>
                     <div>Wait!</div>
