@@ -42,7 +42,7 @@ defmodule BlackjackWeb.BlackjackLive do
     GameServer.start_round()
     BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
-  
+
   end
 
   @impl true
