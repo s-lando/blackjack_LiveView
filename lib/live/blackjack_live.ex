@@ -59,7 +59,7 @@ defmodule BlackjackWeb.BlackjackLive do
     total_players = Map.get(game_state_new, :total_players)
     Logger.info("Current turn: #{current_turn}, Total players: #{total_players}")
 
-   # Wait till dealer_action is fixed - Each player should keep track of their own result
+    player_result = Map.get(game_state_new, socket.assigns.seat) |> Map.get(:result)
 
     case current_turn > total_players do
       true ->
@@ -67,15 +67,15 @@ defmodule BlackjackWeb.BlackjackLive do
           true ->
             GameServer.dealer_action()
             BlackjackWeb.Endpoint.broadcast!("game_state", "game_state_change", :game_state_change)
-            {:noreply, assign(socket, game_state: GameServer.get_game_state())}
+            {:noreply, assign(socket, result: player_result, game_state: GameServer.get_game_state())}
           false ->
             BlackjackWeb.Endpoint.broadcast("game_state", "game_ended", game_state_new)
         end
 
-      false -> {:noreply, assign(socket, game_state: game_state_new)}
+      false -> {:noreply, assign(socket, result: player_result, game_state: game_state_new)}
     end
 
-    {:noreply, assign(socket, game_state: game_state_new)}
+    {:noreply, assign(socket, result: player_result, game_state: game_state_new)}
 
   end
 
