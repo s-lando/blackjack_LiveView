@@ -31,7 +31,9 @@ defmodule BlackjackWeb.BlackjackLive do
 
   @impl true
   def handle_event("seat", %{"seatid" => seat_id}, socket) do
-    if socket.assigns.game_state.seat1 != nil && socket.assigns.game_state.seat1.playerID == socket.assigns.playerID || socket.assigns.game_state.seat2 != nil && socket.assigns.game_state.seat2.playerID == socket.assigns.playerID do
+    if socket.assigns.game_state.seat1 != nil && socket.assigns.game_state.seat1.playerID == socket.assigns.playerID ||
+    socket.assigns.game_state.seat2 != nil && socket.assigns.game_state.seat2.playerID == socket.assigns.playerID ||
+    socket.assigns.game_state.seat3 != nil && socket.assigns.game_state.seat3.playerID == socket.assigns.playerID do
       {:noreply, socket}
     else
       IO.puts("this is the player id: " <> inspect(socket.assigns.playerID))
