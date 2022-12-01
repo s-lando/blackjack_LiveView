@@ -8,11 +8,17 @@ defmodule BlackjackWeb.BlackjackLive do
     # subscribes all users to the game_state topic so that
     # I can handle_info for different events received from broadcast
     if connected?(socket),
-    do: BlackjackWeb.Endpoint.subscribe("game_state")
+      do: BlackjackWeb.Endpoint.subscribe("game_state")
 
     game_state = GameServer.get_game_state()
 
-    {:ok, assign(socket, playerID: params["name"], playerName: params["name"], result: nil, game_state: game_state)}
+    {:ok,
+     assign(socket,
+       playerID: params["name"],
+       playerName: params["name"],
+       result: nil,
+       game_state: game_state
+     )}
   end
 
   @impl true
@@ -58,7 +64,6 @@ defmodule BlackjackWeb.BlackjackLive do
     GameServer.start_round()
     BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
-
   end
 
   @impl true
@@ -71,22 +76,30 @@ defmodule BlackjackWeb.BlackjackLive do
 
     player_result = Map.get(game_state_new, socket.assigns.seat) |> Map.get(:result)
 
-    case current_turn > total_players do
+    case current_turn == -1 do
       true ->
         case game_state_new.game_in_progress do
           true ->
             GameServer.dealer_action()
-            BlackjackWeb.Endpoint.broadcast!("game_state", "game_state_change", :game_state_change)
-            {:noreply, assign(socket, result: player_result, game_state: GameServer.get_game_state())}
+
+            BlackjackWeb.Endpoint.broadcast!(
+              "game_state",
+              "game_state_change",
+              :game_state_change
+            )
+
+            {:noreply,
+             assign(socket, result: player_result, game_state: GameServer.get_game_state())}
+
           false ->
             BlackjackWeb.Endpoint.broadcast("game_state", "game_ended", game_state_new)
         end
 
-      false -> {:noreply, assign(socket, result: player_result, game_state: game_state_new)}
+      false ->
+        {:noreply, assign(socket, result: player_result, game_state: game_state_new)}
     end
 
     {:noreply, assign(socket, result: player_result, game_state: game_state_new)}
-
   end
 
   @impl true
@@ -100,14 +113,17 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   def handle_info(%{event: "user_leaving_game", payload: _}, socket) do
-    {:noreply, assign(socket, result: nil, seat: nil, game_state: GameServer.get_game_state)}
+    {:noreply, assign(socket, result: nil, seat: nil, game_state: GameServer.get_game_state())}
   end
 
   @impl true
   def terminate({:shutdown, :closed}, socket) do
     Logger.info(socket.assigns.playerID)
+
     case Map.get(socket.assigns, :seat) do
-      nil -> {:noreply, socket}
+      nil ->
+        {:noreply, socket}
+
       seat_id ->
         GameServer.leave(seat_id)
         BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
@@ -146,5 +162,4 @@ defmodule BlackjackWeb.BlackjackLive do
       :club -> "clubs"
     end
   end
-
 end

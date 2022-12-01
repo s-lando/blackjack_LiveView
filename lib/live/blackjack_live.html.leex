@@ -39,12 +39,16 @@
             <button phx-click="start_round">Start Game</button>
         <% end %>
 
-         <%= case @result do %>
-                <% nil -> %><p></p>
-                <% :bust -> %><p>Busted</p>
-                <% :lose -> %><p>You lost</p>
-                <% :win -> %><p>You win</p>
+        <%= case @result do %>
+            <% nil -> %> <p> </p>
+            <% :bust -> %> <p> you bust </p>
+            <% :blackjack -> %> <p> BLACKJACK! </p>
+            <% :win -> %> <p> you WIN! </p>
+            <% :lose -> %> <p> you lost </p>
+            <% :push -> %> <p> push </p>
         <% end %>
+
+
 
     <!-- PLAYER SECTION -->
 
@@ -74,9 +78,24 @@
                         </div>
                     </div>
 
+<!-- for displaying results for every player to everyone
+
+                    <div class="results">
+                        <%= case @game_state[:"seat#{i}"][:result] do %>
+                                <% nil -> %> <p> </p>
+                                <% :win -> %> <p> Win! </p>
+                                <% :lose -> %> <p> Loss </p>
+                                <% :push -> %> <p> Push </p>
+                                <% :bust -> %> <p> Bust </p>
+                                <% :blackjack -> %> <p> Blackjack </p>
+                        <% end %>
+                    </div>
+
+                    -->
+
                     <div class="button-container">
                     <%= if @game_state.game_in_progress == false do %>
-                        <div class="gamestate"></div>
+
                         <button class= "leaveBtn" phx-click="leave_seat">Leave seat</button>
                     <% else %>
                             <%= if @game_state.turn == i do %>
