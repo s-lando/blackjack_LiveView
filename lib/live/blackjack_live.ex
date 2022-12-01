@@ -57,11 +57,12 @@ defmodule BlackjackWeb.BlackjackLive do
     game_state_new = GameServer.get_game_state()
     current_turn = Map.get(game_state_new, :turn)
     total_players = Map.get(game_state_new, :total_players)
+
     Logger.info("Current turn: #{current_turn}, Total players: #{total_players}")
 
     player_result = Map.get(game_state_new, socket.assigns.seat) |> Map.get(:result)
 
-    case current_turn > total_players do
+    case current_turn > length(total_players) do
       true ->
         case game_state_new.game_in_progress do
           true ->
