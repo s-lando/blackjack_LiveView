@@ -99,7 +99,8 @@ defmodule GameServer do
       |> update_seated_player_state(:seat1)
       |> update_seated_player_state(:seat2)
       |> update_seated_player_state(:seat3)
-      |> Map.put(:cards, CardServer.get_remaining_deck())
+
+    # |> Map.put(:cards, CardServer.get_remaining_deck())
 
     {:noreply, new_state}
   end
