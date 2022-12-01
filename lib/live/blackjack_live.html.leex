@@ -36,7 +36,7 @@
 
         <!-- only show the Start Game button when at least one player has taken a seat and if game is not in progress -->
         <%= if (@game_state.seat1 != nil || @game_state.seat2 != nil || @game_state.seat3 != nil)
-        && @game_state.game_in_progress == false do %>
+        && @game_state.game_in_progress == false && @playerName in @game_state.total_players do %>
             <button phx-click="start_round">Start Game</button>
         <% end %>
 
