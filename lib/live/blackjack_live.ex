@@ -31,9 +31,17 @@ defmodule BlackjackWeb.BlackjackLive do
 
   @impl true
   def handle_event("seat", %{"seatid" => seat_id}, socket) do
-    GameServer.sit(socket.assigns.playerID, String.to_atom(seat_id))
-    BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
-    {:noreply, assign(socket, seat: String.to_atom(seat_id))}
+    if socket.assigns.game_state.seat1 != nil && socket.assigns.game_state.seat1.playerID == socket.assigns.playerID || socket.assigns.game_state.seat2 != nil && socket.assigns.game_state.seat2.playerID == socket.assigns.playerID do
+      {:noreply, socket}
+    else
+      IO.puts("this is the player id: " <> inspect(socket.assigns.playerID))
+      IO.puts("This is the current seat1: " <> inspect(socket.assigns.game_state.seat1))
+      IO.puts("This is the current seat2: " <> inspect(socket.assigns.game_state.seat2))
+      GameServer.sit(socket.assigns.playerID, String.to_atom(seat_id))
+      BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
+      {:noreply, assign(socket, seat: String.to_atom(seat_id))}
+    end
+
   end
 
   @impl true
