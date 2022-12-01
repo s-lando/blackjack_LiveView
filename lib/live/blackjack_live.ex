@@ -54,7 +54,7 @@ defmodule BlackjackWeb.BlackjackLive do
 
   @impl true
   def handle_event("leave_seat", _params, socket) do
-    GameServer.leave(socket.assigns.seat)
+    GameServer.leave(socket.assigns.playerID, socket.assigns.seat)
     BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
     {:noreply, socket}
   end
@@ -72,6 +72,7 @@ defmodule BlackjackWeb.BlackjackLive do
     game_state_new = GameServer.get_game_state()
     current_turn = Map.get(game_state_new, :turn)
     total_players = Map.get(game_state_new, :total_players)
+
     Logger.info("Current turn: #{current_turn}, Total players: #{total_players}")
 
     player_result = Map.get(game_state_new, socket.assigns.seat) |> Map.get(:result)
@@ -121,11 +122,9 @@ defmodule BlackjackWeb.BlackjackLive do
     Logger.info(socket.assigns.playerID)
 
     case Map.get(socket.assigns, :seat) do
-      nil ->
-        {:noreply, socket}
-
+      nil -> {:noreply, socket}
       seat_id ->
-        GameServer.leave(seat_id)
+        GameServer.leave(seat_id, socket.assigns.playerID)
         BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
     end
   end
