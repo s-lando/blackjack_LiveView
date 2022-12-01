@@ -35,7 +35,8 @@
         <!-- shows game result information -->
 
         <!-- only show the Start Game button when at least one player has taken a seat and if game is not in progress -->
-        <%= if (@game_state.seat1 != nil || @game_state.seat2 != nil || @game_state.seat3 != nil) && @game_state.game_in_progress == false do %>
+        <%= if (@game_state.seat1 != nil || @game_state.seat2 != nil || @game_state.seat3 != nil)
+        && @game_state.game_in_progress == false && @playerName in @game_state.total_players do %>
             <button phx-click="start_round">Start Game</button>
         <% end %>
 
@@ -94,11 +95,12 @@
                     -->
 
                     <div class="button-container">
-                    <%= if @game_state.game_in_progress == false do %>
 
+                    <%= if @game_state.game_in_progress == false && @playerName == @game_state[:"seat#{i}"][:playerID] do %>
+                        <div class="gamestate"></div>
                         <button class= "leaveBtn" phx-click="leave_seat">Leave seat</button>
                     <% else %>
-                            <%= if @game_state.turn == i do %>
+                            <%= if @game_state.turn == i && @playerName == @game_state[:"seat#{i}"][:playerID] do %>
                                 <button class = "hit" phx-value-seatid="<%= :"seat#{i}" %>" phx-click="hit">hit</button>
                                 <button class ="stand" phx-value-seatid="<%= :"seat#{i}" %>" phx-click="stand">stand</button>
                             <% else %>

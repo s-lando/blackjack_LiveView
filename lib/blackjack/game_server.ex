@@ -27,8 +27,8 @@ defmodule GameServer do
     GenServer.cast(__MODULE__, {:stand, seat_id})
   end
 
-  def leave(seat_id) do
-    GenServer.cast(__MODULE__, {:leave, seat_id})
+  def leave(player_id ,seat_id) do
+    GenServer.cast(__MODULE__, {:leave, seat_id, player_id})
   end
 
   def dealer_action() do
@@ -50,7 +50,7 @@ defmodule GameServer do
       game_in_progress: false,
       turn: 0,
       completed_games: 0,
-      total_players: 0
+      total_players: []
     }
 
     {:ok, game_state}
@@ -71,13 +71,16 @@ defmodule GameServer do
       hand_options: %{},
       result: nil
     }
-
-    current_total_players = Map.get(state, :total_players)
-
+    new_total_player = Map.get(state, :total_players)
+    new_total_player = [player_id | new_total_player]
     new_state =
-      state
-      |> Map.put(seat_id, player)
-      |> Map.put(:total_players, current_total_players + 1)
+    state
+    |> Map.put(seat_id, player)
+    |> Map.put(:total_players, new_total_player)
+
+    Logger.info("------------")
+    Logger.info(Map.get(state, :total_players))
+    Logger.info("------------")
 
     Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
     {:noreply, new_state}
@@ -166,14 +169,18 @@ defmodule GameServer do
   end
 
   @impl true
-  def handle_cast({:leave, seat_id}, state) do
+  def handle_cast({:leave, seat_id, player_id}, state) do
     current_total_players = Map.get(state, :total_players)
+    new = List.delete(current_total_players, player_id)
+    Logger.info("tets: #{player_id}")
 
     new_state =
-      state
-      |> Map.put(seat_id, nil)
-      |> Map.put(:total_players, current_total_players - 1)
-
+    state
+    |> Map.put(seat_id, nil)
+    |> Map.put(:total_players, new)
+    Logger.info("kkkkkkkkkkk")
+    Logger.info(Map.get(state, :total_players))
+    Logger.info("kkkkkkkkkkk")
     {:noreply, new_state}
   end
 
