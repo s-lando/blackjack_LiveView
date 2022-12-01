@@ -75,9 +75,9 @@ defmodule GameServer do
     current_total_players = Map.get(state, :total_players)
 
     new_state =
-    state
-    |> Map.put(seat_id, player)
-    |> Map.put(:total_players, current_total_players + 1)
+      state
+      |> Map.put(seat_id, player)
+      |> Map.put(:total_players, current_total_players + 1)
 
     Logger.info("player_id: #{player_id}, and seat_id #{seat_id}")
     {:noreply, new_state}
@@ -85,8 +85,7 @@ defmodule GameServer do
 
   @impl true
   def handle_cast(:start_round, state) do
-
-    turn = determine_turn(state)
+    turn = determine_turn(state, 0)
 
     new_state =
       state
@@ -116,7 +115,7 @@ defmodule GameServer do
       new_state =
         state
         |> Map.put(seat_id, player_state)
-        |> Map.put(:turn, state.turn + 1)
+        |> Map.put(:turn, determine_turn(state, state.turn))
 
       {:noreply, new_state}
     else
@@ -133,7 +132,7 @@ defmodule GameServer do
   def handle_cast({:stand, _seat_id}, state) do
     new_state =
       state
-      |> Map.put(:turn, state.turn + 1)
+      |> Map.put(:turn, determine_turn(state, state.turn))
 
     {:noreply, new_state}
   end
@@ -168,16 +167,18 @@ defmodule GameServer do
     current_total_players = Map.get(state, :total_players)
 
     new_state =
-    state
-    |> Map.put(seat_id, nil)
-    |> Map.put(:total_players, current_total_players - 1)
+      state
+      |> Map.put(seat_id, nil)
+      |> Map.put(:total_players, current_total_players - 1)
 
     {:noreply, new_state}
   end
 
   def update_player_result(player, dealer_hand_value) do
     case player do
-      nil -> player
+      nil ->
+        player
+
       _ ->
         player_hand_value = player.hand |> best_hand_option()
 
@@ -200,7 +201,6 @@ defmodule GameServer do
             Map.put(player, :result, nil)
         end
     end
-
   end
 
   def best_hand_option(hand) do
@@ -213,17 +213,30 @@ defmodule GameServer do
     end
   end
 
-  # TODO: additional implementation required so that start_round, hit and stand can use
-  defp determine_turn(game_state) do
-    1
+  # returns the int for which seat's turn it is
+  def determine_turn(game_state, prev_turn) do
+    turn_atom = "seat#{prev_turn + 1}" |> String.to_atom()
+
+    # if :seat{x} is nil, then a player hasn't sat there yet.  if not in map, then we've gone through all seats
+    case Map.get(game_state, turn_atom, :noseat) do
+      nil ->
+        determine_turn(game_state, prev_turn + 1)
+
+      :noseat ->
+        -1
+
+      _ ->
+        prev_turn + 1
+    end
   end
 
   defp update_seated_player_state(game_state, seatId) do
-
     hand = CardServer.deal(2)
+
     case Map.get(game_state, seatId) do
       nil ->
         game_state
+
       player ->
         p =
           player
