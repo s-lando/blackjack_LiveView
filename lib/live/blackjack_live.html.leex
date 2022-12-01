@@ -41,9 +41,10 @@
 
          <%= case @result do %>
                 <% nil -> %><p></p>
-                <% :bust -> %><p>Busted</p>
+                <% :bust -> %><p>Bust</p>
                 <% :lose -> %><p>You lost</p>
                 <% :win -> %><p>You win</p>
+                <% :push -> %><p>Push</p>
         <% end %>
 
     <!-- PLAYER SECTION -->
