@@ -46,7 +46,7 @@ defmodule GameServer do
       seat1: nil,
       seat2: nil,
       seat3: nil,
-      cards: CardServer.get_remaining_deck(),
+      # cards: CardServer.get_remaining_deck(),
       game_in_progress: false,
       turn: 0,
       completed_games: 0,
