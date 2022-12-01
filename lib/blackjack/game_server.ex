@@ -87,6 +87,8 @@ defmodule GameServer do
   def handle_cast(:start_round, state) do
     turn = determine_turn(state, 0)
 
+    CardServer.new()
+
     new_state =
       state
       |> Map.put(:game_in_progress, true)
