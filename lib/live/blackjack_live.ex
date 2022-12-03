@@ -36,10 +36,25 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
+  def handle_event("close_modal", _params, socket) do
+    {:noreply, assign(socket, result: nil)}
+  end
+
+  @impl true
+  def handle_event("close_restart_round", _params, socket) do
+    GameServer.start_round()
+    BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
+    {:noreply, assign(socket, result: nil)}
+  end
+
+  @impl true
   def handle_event("seat", %{"seatid" => seat_id}, socket) do
-    if socket.assigns.game_state.seat1 != nil && socket.assigns.game_state.seat1.playerID == socket.assigns.playerID ||
-    socket.assigns.game_state.seat2 != nil && socket.assigns.game_state.seat2.playerID == socket.assigns.playerID ||
-    socket.assigns.game_state.seat3 != nil && socket.assigns.game_state.seat3.playerID == socket.assigns.playerID do
+    if (socket.assigns.game_state.seat1 != nil &&
+          socket.assigns.game_state.seat1.playerID == socket.assigns.playerID) ||
+         (socket.assigns.game_state.seat2 != nil &&
+            socket.assigns.game_state.seat2.playerID == socket.assigns.playerID) ||
+         (socket.assigns.game_state.seat3 != nil &&
+            socket.assigns.game_state.seat3.playerID == socket.assigns.playerID) do
       {:noreply, socket}
     else
       IO.puts("this is the player id: " <> inspect(socket.assigns.playerID))
@@ -49,7 +64,6 @@ defmodule BlackjackWeb.BlackjackLive do
       BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
       {:noreply, assign(socket, seat: String.to_atom(seat_id))}
     end
-
   end
 
   @impl true
@@ -60,7 +74,7 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   @impl true
-  def handle_event("start_round", params, socket) do
+  def handle_event("start_round", _params, socket) do
     GameServer.start_round()
     BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
@@ -122,14 +136,16 @@ defmodule BlackjackWeb.BlackjackLive do
     Logger.info(socket.assigns.playerID)
 
     case Map.get(socket.assigns, :seat) do
-      nil -> {:noreply, socket}
+      nil ->
+        {:noreply, socket}
+
       seat_id ->
         GameServer.leave(seat_id, socket.assigns.playerID)
         BlackjackWeb.Endpoint.broadcast("game_state", "user_leaving_game", socket.assigns.seat)
     end
   end
 
-  def terminate(reason, socket) do
+  def terminate(reason, _socket) do
     Logger.info(reason)
     Logger.info("another terminate handle")
   end
