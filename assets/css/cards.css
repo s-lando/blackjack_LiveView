@@ -913,3 +913,10 @@
     transform: scale(1.25); 
     transition: transform 400ms ease;
 }
+
+.reveal-true-1 {
+    filter: brightness(0);
+}
+.reveal-false-1 {
+    filter: brightness(1);
+}
