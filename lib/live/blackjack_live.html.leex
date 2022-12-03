@@ -1,7 +1,7 @@
 
 <div class="header">
-    <h2>Blackjack</h2>
-    <h3> Welcome <%= @playerName %> </h3>
+    <h2>Blackjack  </h2>
+    <h4 class="header-welcome"> Welcome <%= @playerName %> <br> Round <%= @game_state.completed_games + 1 %></h4>
 </div>
 <div class="content">
 <!-- DEALER SECTION BELOW -->
@@ -152,6 +152,7 @@
                 <div class= "playerContainer">
                     <div class="playingDetails">
                         <div class="playerName">Player: <%= @game_state[:"seat#{i}"][:playerID] %></div>
+                        <div class="playerName">Score: <%= @game_state[:"seat#{i}"][:score] %></div>
                     </div>
 
 <!-- for displaying results for every player to everyone
