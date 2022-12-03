@@ -69,7 +69,8 @@ defmodule GameServer do
       hand: [],
       hand_value: 0,
       hand_options: %{},
-      result: nil
+      result: nil,
+      score: 0
     }
     new_total_player = Map.get(state, :total_players)
     new_total_player = [player_id | new_total_player]
@@ -160,10 +161,12 @@ defmodule GameServer do
         |> Map.put(:seat2, update_player_result(state.seat2, dealer_hand_value))
         |> Map.put(:seat3, update_player_result(state.seat3, dealer_hand_value))
 
+      new_state.seat2 |> inspect() |> Logger.debug()
       {:noreply, new_state}
     else
       new_state = Map.put(state, :dealer, state.dealer ++ CardServer.deal())
 
+      new_state.seat2 |> inspect() |> Logger.debug()
       {:noreply, new_state}
     end
   end
@@ -199,7 +202,10 @@ defmodule GameServer do
           # player_hand_value == 21 ->
           #   Map.put(player, :result, :blackjack)
           player_hand_value > dealer_hand_value ->
+            new_score = Map.get(player, :score)
+            player = Map.put(player, :score, new_score + 1)
             Map.put(player, :result, :win)
+
 
           player_hand_value < dealer_hand_value ->
             Map.put(player, :result, :lose)
