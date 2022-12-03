@@ -16,8 +16,9 @@
             </div>
             <div class = "playingCardsContainer">
                 <div class="playingCards simpleCards">
-                    <%= for {rank, suite} <- @game_state.dealer do %>
-                        <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
+                    <%= for {{rank, suite}, ind} <- Enum.with_index(@game_state.dealer) do %>
+                        <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>
+                        reveal-<%= @game_state.game_in_progress == true %>-<%= ind %>">
                             <!-- <span class="rank"><%= rank_to_string(rank)%></span>
                             <span class="suit"></span> -->
                         </div>
@@ -60,9 +61,24 @@
                         </div>
                     </div>
 
-            <% :blackjack -> %> <p> BLACKJACK! </p>
-            <% :win -> %> <p> you WIN! </p>
-            <% :lose -> %>
+            <% :blackjack -> %>
+                    <div class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header green">
+                                <span class="close"  phx-click="close_modal">&times;</span>
+                                <h2>BLACKJACK!!!</h2>
+                            </div>
+                            <div class="modal-body">
+                                <p>You are a prodigy and should go buy the lotto ticket.</p>
+                                <p>You have won a round and have gained one point!!! You have bested everyone with your amazing skills. Good job!!!</p>
+                            </div>
+                            <div class="modal-footer green">
+                                <button phx-click="close_restart_round">New Round</button>
+                                <button phx-click="close_modal" class="gray">Close</button>
+                            </div>
+                        </div>
+                    </div>
+            <% :win -> %>
                     <div class="modal">
                         <div class="modal-content">
                             <div class="modal-header green">
@@ -79,7 +95,40 @@
                             </div>
                         </div>
                     </div>
-            <% :push -> %> <p> push </p>
+            <% :lose -> %>
+                    <div class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header red">
+                                <span class="close"  phx-click="close_modal start_round">&times;</span>
+                                <h2>LOSE!!!</h2>
+                            </div>
+                            <div class="modal-body">
+                                <p>Your skills are not up to par. You have lost this round. </p>
+                                <p>Try again if you want to beat the greatest players of this era.</p>
+                            </div>
+                            <div class="modal-footer red">
+                                <button phx-click="close_restart_round">New Round</button>
+                                <button phx-click="close_modal" class="gray">Close</button>
+                            </div>
+                        </div>
+                    </div>
+            <% :push -> %>
+                    <div class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header gray">
+                                <span class="close"  phx-click="close_modal">&times;</span>
+                                <h2>PUSH</h2>
+                            </div>
+                            <div class="modal-body">
+                                <p>You are all winners? But no one really won.</p>
+                                <p>In the end, you are all losers. All tied, try again </p>
+                            </div>
+                            <div class="modal-footer gray">
+                                <button phx-click="close_restart_round">New Round</button>
+                                <button phx-click="close_modal" class="gray">Close</button>
+                            </div>
+                        </div>
+                    </div>
         <% end %>
 
 
