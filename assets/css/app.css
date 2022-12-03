@@ -15,9 +15,14 @@
 .dealer-info {
   padding: 1em 2em 1em 1em;
   min-height: 80px;
-
+  font-size: 18px;
 }
 
+.dealer-container {
+ margin: auto;
+ width: 60%;
+ background-color: #9f7a7a63;
+}
 .gap {
   height: 100px;
   height: 100px;
@@ -41,6 +46,8 @@
   margin-bottom: 2em;
   display: inline-block;
   width: 30%;
+  background: #9f7a7a63;
+  vertical-align: top;
 }
 
 /* Alerts and form errors used by phx.new */
@@ -194,13 +201,16 @@
 
 
 .header {
-  background-color: #9BCFFF;
-  min-height: 100px;
+  /* background-color: #9BCFFF; */
+  background-color: #9bcfff12;
+  height: 60px;
+  min-height: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   justify-content: space-between;
+  color: rgb(192, 188, 188);
 }
 
 .header h2 {
@@ -248,7 +258,10 @@
 .playerContainer {
   display: flex;
   justify-content: space-between;
+  font-size: 1.2em;
+  color: white;
 }
+
 .player-container p {
   text-align: center !important;
   margin: 0px !important;
@@ -277,4 +290,10 @@
 
 .dealer {
   position: absolute;
+  color: white;
+  font-size: 2em;
+}
+
+.content {
+  margin-left: 10px;
 }

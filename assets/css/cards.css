@@ -12,7 +12,9 @@
 
 .playingCards .card {
     /* animation-duration: 1s; //running slower to show effect */
-    animation-duration: 1s;
+    transform: translateY((-125%));
+    transition: transform .5s cubic-bezier(.25,0,.28,1.43);
+    animation-duration: 1.5s;
     animation-delay: 0.5s;
     animation-name: animate-fade;
     animation-timing-function: cubic-bezier(.26,.53,.74,1.48);
@@ -896,14 +898,18 @@
 .animate.fade {
     animation-name: animate-fade;
     animation-timing-function: ease;
+    
   }
   @keyframes animate-fade {
-    0% { opacity: 0; }
+    0% { opacity: 0;
+        transform-origin: 30cm 30cm;
+        transform: translate(-100%, 50%) rotate(45deg) translate(100%, -50%);
+    }
     100% { opacity: 1; }
   }
 
 /* hovering a card */
 .card:hover {
-    transform: scale(1.03); 
-    transition: transform 250ms ease;
+    transform: scale(1.25); 
+    transition: transform 400ms ease;
 }
