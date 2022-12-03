@@ -1,6 +1,7 @@
 /* This file is for your main application CSS */
 @import "./phoenix.css";
 @import "./cards.css";
+@import "./modal.css";
 
 /* you can put your styles in here */
 
@@ -38,6 +39,8 @@
 
 .player-container {
   margin-bottom: 2em;
+  display: inline-block;
+  width: 30%;
 }
 
 /* Alerts and form errors used by phx.new */
@@ -235,7 +238,7 @@
 
 .button-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: inherit;
 }
 
 .button-container button {
@@ -254,10 +257,11 @@
 .playerName {
   max-width: 300px;
   margin-right: 30px;
+  word-break: break-word;
 }
 
 .playingDetails {
-  display: flex;
+  /* display: flex; */
 }
 
 .leaveBtn, .stand {

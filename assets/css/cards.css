@@ -11,9 +11,15 @@
 ********************************************************************/
 
 .playingCards .card {
+    /* animation-duration: 1s; //running slower to show effect */
+    animation-duration: 1s;
+    animation-delay: 0.5s;
+    animation-name: animate-fade;
+    animation-timing-function: cubic-bezier(.26,.53,.74,1.48);
+    animation-fill-mode: backwards;
     display: inline-block;
-    width: 95px;
-    height: 130px;
+    width: 4em;
+    height: 5em;
     border: 1px solid #666;
     border-radius: .3em;
     -moz-border-radius: .3em;
@@ -884,4 +890,20 @@
     background-image: url(/images/cards/KDiamond.png);
     background-repeat: round;
 
+}
+
+/* Fade In */
+.animate.fade {
+    animation-name: animate-fade;
+    animation-timing-function: ease;
+  }
+  @keyframes animate-fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+/* hovering a card */
+.card:hover {
+    transform: scale(1.03); 
+    transition: transform 250ms ease;
 }
