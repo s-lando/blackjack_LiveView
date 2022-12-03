@@ -42,10 +42,43 @@
 
         <%= case @result do %>
             <% nil -> %> <p> </p>
-            <% :bust -> %> <p> you bust </p>
+            <% :bust -> %>
+                    <div class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header red">
+                                <span class="close"  phx-click="close_modal start_round">&times;</span>
+                                <h2>BUSTED!!!</h2>
+                            </div>
+                            <div class="modal-body">
+                                <p>You were too greedy and you got busted like Ghost Busters!!!</p>
+                                <p>Try again if you want to beat the greatest players of this era.</p>
+                            </div>
+                            <div class="modal-footer red">
+                                <button phx-click="close_restart_round">New Round</button>
+                                <button phx-click="close_modal" class="gray">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
             <% :blackjack -> %> <p> BLACKJACK! </p>
             <% :win -> %> <p> you WIN! </p>
-            <% :lose -> %> <p> you lost </p>
+            <% :lose -> %>
+                    <div class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header green">
+                                <span class="close"  phx-click="close_modal">&times;</span>
+                                <h2>WINNER!!!</h2>
+                            </div>
+                            <div class="modal-body">
+                                <p>Winner winner chicken dinner!!!</p>
+                                <p>You have won a round and have gained one point!!! Keep going and you may be one of the greatest players of this era.</p>
+                            </div>
+                            <div class="modal-footer green">
+                                <button phx-click="close_restart_round">New Round</button>
+                                <button phx-click="close_modal" class="gray">Close</button>
+                            </div>
+                        </div>
+                    </div>
             <% :push -> %> <p> push </p>
         <% end %>
 
@@ -69,14 +102,6 @@
                 <div class= "playerContainer">
                     <div class="playingDetails">
                         <div class="playerName">Player: <%= @game_state[:"seat#{i}"][:playerID] %></div>
-                        <div class="userplayingCardsContainer">
-                            <div class="playingCards simpleCards">
-                                <%= for {rank, suite} <- @game_state[:"seat#{i}"][:hand] do %>
-                                    <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
-                                    </div>
-                                <% end %>
-                            </div>
-                        </div>
                     </div>
 
 <!-- for displaying results for every player to everyone
@@ -109,7 +134,14 @@
                     <% end %>
                     </div>
                 </div>
-
+                        <div class="userplayingCardsContainer">
+                            <div class="playingCards simpleCards">
+                                <%= for {rank, suite} <- @game_state[:"seat#{i}"][:hand] do %>
+                                    <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
             </div>
         <% end %>
     <% end %>
