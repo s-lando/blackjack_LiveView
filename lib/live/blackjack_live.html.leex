@@ -10,9 +10,10 @@
         <div class="dealer-info">
             <div class ="dealer">
                 <div>Dealer</div>
-                <%= if @game_state.game_in_progress == true do %>
-                <div>score</div>
-                <% end %>
+                <!--<%= if @game_state.game_in_progress == true do %>
+                <% end %> -->
+                <div>Score: <%= @game_state.dealer_score %></div>
+
             </div>
             <div class = "playingCardsContainer">
                 <div class="playingCards simpleCards">
