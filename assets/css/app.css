@@ -13,7 +13,7 @@
 }
 
 .dealer-info {
-  padding: 1em 2em 1em 1em;
+  padding: 8px 2em 0em 1em;
   min-height: 80px;
   font-size: 18px;
 }
@@ -273,7 +273,7 @@
 
 .playerName {
   max-width: 300px;
-  margin-right: 30px;
+  /* margin-right: 30px; */
   word-break: break-word;
 }
 
@@ -295,7 +295,7 @@
 .dealer {
   position: absolute;
   color: white;
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .content {
