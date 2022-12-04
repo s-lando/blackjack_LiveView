@@ -163,12 +163,12 @@ defmodule GameServer do
         |> Map.put(:seat3, update_player_result(state.seat3, dealer_hand_value))
 
       newest_state = new_state |> Map.put(:dealer_score, update_dealer_result(state.dealer_score, new_state.seat1, new_state.seat2, new_state.seat3))
-      newest_state |> inspect() |> Logger.debug()
+      # newest_state |> inspect() |> Logger.debug()
       {:noreply, newest_state}
     else
       new_state = Map.put(state, :dealer, state.dealer ++ CardServer.deal())
 
-      new_state |> inspect() |> Logger.debug()
+      # new_state |> inspect() |> Logger.debug()
       {:noreply, new_state}
     end
   end
@@ -222,16 +222,10 @@ defmodule GameServer do
   end
 
   def update_dealer_result(dealerScore, seat1, seat2, seat3) do
-    IO.inspect(seat1)
-    IO.inspect(seat2)
-    IO.inspect(seat3)
     result1 = if seat1 == nil do nil else Map.get(seat1, :result) end
     result2 = if seat2 == nil do nil else Map.get(seat2, :result) end
     result3 = if seat3 == nil do nil else Map.get(seat3, :result) end
 
-    IO.inspect(result1)
-    IO.inspect(result2)
-    IO.inspect(result3)
     case {result1, result2, result3} do
       {:win, _, _} -> dealerScore
       {_, :win, _} -> dealerScore
