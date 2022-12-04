@@ -12,7 +12,7 @@
                 <div>Dealer</div>
                 <!--<%= if @game_state.game_in_progress == true do %>
                 <% end %> -->
-                <div>Score: <%= @game_state.dealer_score %></div>
+                <div>Wins: <%= @game_state.dealer_score %></div>
 
             </div>
             <div class = "playingCardsContainer">
@@ -153,7 +153,7 @@
                 <div class= "playerContainer">
                     <div class="playingDetails">
                         <div class="playerName">Player: <%= @game_state[:"seat#{i}"][:playerID] %></div>
-                        <div class="playerName">Score: <%= @game_state[:"seat#{i}"][:score] %></div>
+                        <div class="playerName">Wins: <%= @game_state[:"seat#{i}"][:score] %></div>
                     </div>
 
 <!-- for displaying results for every player to everyone
