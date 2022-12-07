@@ -190,18 +190,18 @@ defmodule GameServer do
   def handle_cast({:leave, seat_id, player_id}, state) do
     current_total_players = Map.get(state, :total_players)
     new = List.delete(current_total_players, player_id)
-    Logger.info("Player left: #{player_id}")
-    Logger.info("Seat left #{seat_id}")
-    Logger.info("new_state: #{new}")
+    # Logger.info("Player left: #{player_id}")
+    # Logger.info("Seat left #{seat_id}")
+    # Logger.info("new_state: #{new}")
 
     new_state =
       state
       |> Map.put(seat_id, nil)
       |> Map.put(:total_players, new)
 
-    Logger.info("kkkkkkkkkkk")
-    Logger.info(Map.get(state, :total_players))
-    Logger.info("kkkkkkkkkkk")
+    # Logger.info("kkkkkkkkkkk")
+    # Logger.info(Map.get(state, :total_players))
+    # Logger.info("kkkkkkkkkkk")
     {:noreply, new_state}
   end
 
