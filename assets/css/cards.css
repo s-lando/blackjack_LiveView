@@ -363,6 +363,8 @@
 .playingCards.faceImages .card.rank-k.clubs  { background-image: url(/images/faces/KC.gif); }
 
 .playingCards.faceImages .card.joker         { background-image: url(/images/faces/joker.gif); }
+
+.playingCards.back { background-image: url(/images/cards/BackCard.png) }
 /* .playingCards.simpleCards .card.rank-j,
 .playingCards.simpleCards .card.rank-q,
 .playingCards.simpleCards .card.rank-k       { background-image: none !important; } */
@@ -892,6 +894,11 @@
     background-image: url(/images/cards/KDiamond.png);
     background-repeat: round;
 
+}
+
+.card.back {
+    background-image: url(/images/cards/BackCard.png);
+    background-repeat: round
 }
 
 /* Fade In */
