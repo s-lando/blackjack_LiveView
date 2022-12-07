@@ -13,6 +13,13 @@ defmodule BlackjackWeb.Index do
     </div>
     <div class="userInfoFormContainer">
     <div class="enterUserInfoForm">
+    <div class="rules"> <h2>How to play?</h2>
+    <p>Step 1: Join a Table</p>
+    <p>Step 2: Check your Hand Value</p>
+    <p>Step 3: Decide whether to Hit or Stand</p>
+    <p>Step 4: Dealer Reveals Their Cards</p>
+    <p>Step 5: See Who is Closer to 21</p>
+    </div>
     <form phx-submit="new">
     <label>Enter your name to start: </label>
     <input placeholder="player_name" name ="username"/>
