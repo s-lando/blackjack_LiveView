@@ -128,7 +128,7 @@ defmodule BlackjackWeb.BlackjackLive do
   end
 
   def handle_info(%{event: "user_leaving_game", payload: _}, socket) do
-    {:noreply, assign(socket, result: nil, seat: nil, game_state: GameServer.get_game_state())}
+    {:noreply, assign(socket, result: nil, game_state: GameServer.get_game_state())}
   end
 
   @impl true

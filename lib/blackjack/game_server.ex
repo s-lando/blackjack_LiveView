@@ -190,7 +190,9 @@ defmodule GameServer do
   def handle_cast({:leave, seat_id, player_id}, state) do
     current_total_players = Map.get(state, :total_players)
     new = List.delete(current_total_players, player_id)
-    Logger.info("tets: #{player_id}")
+    Logger.info("Player left: #{player_id}")
+    Logger.info("Seat left #{seat_id}")
+    Logger.info("new_state: #{new}")
 
     new_state =
       state
