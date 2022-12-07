@@ -42,6 +42,8 @@
             <button phx-click="start_round">Start Game</button>
         <% end %>
 
+
+
         <%= case @result do %>
             <% nil -> %> <p> </p>
             <% :bust -> %>
@@ -138,6 +140,9 @@
 
     </div>
 
+    <div class= "game-info">
+            <p> Dealer stands on soft 17 </p>
+    </div>
     <div>
     <%= for i <- 1..3 do %>
         <%= if @game_state[:"seat#{i}"] == nil do %>
