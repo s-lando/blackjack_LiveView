@@ -27,7 +27,7 @@ defmodule GameServer do
     GenServer.cast(__MODULE__, {:stand, seat_id})
   end
 
-  def leave(player_id ,seat_id) do
+  def leave(player_id, seat_id) do
     GenServer.cast(__MODULE__, {:leave, seat_id, player_id})
   end
 
@@ -51,7 +51,7 @@ defmodule GameServer do
       turn: 0,
       completed_games: 0,
       total_players: [],
-      dealer_score: 0,
+      dealer_score: 0
     }
 
     {:ok, game_state}
@@ -73,12 +73,14 @@ defmodule GameServer do
       result: nil,
       score: 0
     }
+
     new_total_player = Map.get(state, :total_players)
     new_total_player = [player_id | new_total_player]
+
     new_state =
-    state
-    |> Map.put(seat_id, player)
-    |> Map.put(:total_players, new_total_player)
+      state
+      |> Map.put(seat_id, player)
+      |> Map.put(:total_players, new_total_player)
 
     Logger.info("------------")
     Logger.info(Map.get(state, :total_players))
@@ -162,7 +164,18 @@ defmodule GameServer do
         |> Map.put(:seat2, update_player_result(state.seat2, dealer_hand_value))
         |> Map.put(:seat3, update_player_result(state.seat3, dealer_hand_value))
 
-      newest_state = new_state |> Map.put(:dealer_score, update_dealer_result(state.dealer_score, new_state.seat1, new_state.seat2, new_state.seat3))
+      newest_state =
+        new_state
+        |> Map.put(
+          :dealer_score,
+          update_dealer_result(
+            state.dealer_score,
+            new_state.seat1,
+            new_state.seat2,
+            new_state.seat3
+          )
+        )
+
       # newest_state |> inspect() |> Logger.debug()
       {:noreply, newest_state}
     else
@@ -180,9 +193,10 @@ defmodule GameServer do
     Logger.info("tets: #{player_id}")
 
     new_state =
-    state
-    |> Map.put(seat_id, nil)
-    |> Map.put(:total_players, new)
+      state
+      |> Map.put(seat_id, nil)
+      |> Map.put(:total_players, new)
+
     Logger.info("kkkkkkkkkkk")
     Logger.info(Map.get(state, :total_players))
     Logger.info("kkkkkkkkkkk")
@@ -201,13 +215,20 @@ defmodule GameServer do
           player_hand_value > 21 ->
             Map.put(player, :result, :bust)
 
-          # player_hand_value == 21 ->
-          #   Map.put(player, :result, :blackjack)
-          player_hand_value > dealer_hand_value ->
+          ## if dealer busts, everyone else who didn't bust wins
+          dealer_hand_value > 21 ->
             new_score = Map.get(player, :score)
             player = Map.put(player, :score, new_score + 1)
             Map.put(player, :result, :win)
 
+          # additional path for extra animations on blackjack
+          # player_hand_value == 21 ->
+          #   Map.put(player, :result, :blackjack)
+
+          player_hand_value > dealer_hand_value ->
+            new_score = Map.get(player, :score)
+            player = Map.put(player, :score, new_score + 1)
+            Map.put(player, :result, :win)
 
           player_hand_value < dealer_hand_value ->
             Map.put(player, :result, :lose)
@@ -222,9 +243,26 @@ defmodule GameServer do
   end
 
   def update_dealer_result(dealerScore, seat1, seat2, seat3) do
-    result1 = if seat1 == nil do nil else Map.get(seat1, :result) end
-    result2 = if seat2 == nil do nil else Map.get(seat2, :result) end
-    result3 = if seat3 == nil do nil else Map.get(seat3, :result) end
+    result1 =
+      if seat1 == nil do
+        nil
+      else
+        Map.get(seat1, :result)
+      end
+
+    result2 =
+      if seat2 == nil do
+        nil
+      else
+        Map.get(seat2, :result)
+      end
+
+    result3 =
+      if seat3 == nil do
+        nil
+      else
+        Map.get(seat3, :result)
+      end
 
     case {result1, result2, result3} do
       {:win, _, _} -> dealerScore
@@ -235,7 +273,6 @@ defmodule GameServer do
       {_, _, :push} -> dealerScore
       {_, _, _} -> dealerScore + 1
     end
-
   end
 
   def best_hand_option(hand) do
