@@ -158,6 +158,13 @@
                 <div class= "playerContainer">
                     <div class="playingDetails">
                         <div class="playerName">Player: <%= @game_state[:"seat#{i}"][:playerID] %></div>
+                            <%= if @game_state.game_in_progress  == true  do %>
+                                <%= if @game_state[:"seat#{i}"][:hand_options][:option_1] > @game_state[:"seat#{i}"][:hand_options][:option_2] || @game_state[:"seat#{i}"][:hand_options][:option_2] > 21 do %>
+                                    <div class="playerName">Your Best Score: <%= @game_state[:"seat#{i}"][:hand_options][:option_1] %></div>
+                                <% else %>
+                                    <div class="playerName">Your Best Score: <%= @game_state[:"seat#{i}"][:hand_options][:option_2] %></div>
+                                <%end %>
+                            <%end %>
                         <div class="playerName">Wins: <%= @game_state[:"seat#{i}"][:score] %></div>
                     </div>
 
