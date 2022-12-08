@@ -197,6 +197,13 @@
                                     <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>">
                                     </div>
                                 <% end %>
+                                <div class="hand-options">
+                                    <%= if @game_state[:"seat#{i}"][:hand_options][:option_1] == @game_state[:"seat#{i}"][:hand_options][:option_2] do %>
+                                    <p> <%= @game_state[:"seat#{i}"][:hand_options][:option_1] %> </p>
+                                    <% else %>
+                                    <p> <%= @game_state[:"seat#{i}"][:hand_options][:option_1] %> / <%= @game_state[:"seat#{i}"][:hand_options][:option_2] %> </p>
+                                    <% end %>
+                                </div>
                             </div>
                         </div>
             </div>
