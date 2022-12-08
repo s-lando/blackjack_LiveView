@@ -19,7 +19,7 @@
                 <div class="playingCards simpleCards">
                     <%= for {{rank, suite}, ind} <- Enum.with_index(@game_state.dealer) do %>
                         <div class="card rank-<%= rank_to_string(rank)%> <%= suit_to_string(suite) %>
-                        reveal-<%= @game_state.game_in_progress == true %>-<%= ind %>">
+                        reveal-<%= @game_state.turn != -1 %>-<%= ind %>">
                             <!-- <span class="rank"><%= rank_to_string(rank)%></span>
                             <span class="suit"></span> -->
                         </div>
@@ -44,8 +44,12 @@
 
 
 
+
+
+
+
         <%= case @result do %>
-            <% nil -> %> <p> </p>
+            <% nil -> %> <!-- do nothing -->
             <% :bust -> %>
                     <div class="modal">
                         <div class="modal-content">

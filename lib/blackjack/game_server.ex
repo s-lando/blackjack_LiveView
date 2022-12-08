@@ -154,6 +154,8 @@ defmodule GameServer do
     dealer_hand_value = state.dealer |> best_hand_option()
 
     if dealer_hand_value >= 17 do
+
+
       new_state =
         state
         |> Map.put(:game_in_progress, false)
@@ -215,7 +217,8 @@ defmodule GameServer do
 
         cond do
           player_hand_value > 21 ->
-            Map.put(player, :result, :bust)
+            #bust already handled in hit
+            player
 
           player_hand_value == 21 && player.hand |> Enum.count() == 2 ->
             new_score = Map.get(player, :score)
