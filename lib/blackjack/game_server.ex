@@ -217,15 +217,21 @@ defmodule GameServer do
           player_hand_value > 21 ->
             Map.put(player, :result, :bust)
 
+          player_hand_value == 21 && player.hand |> Enum.count() == 2 ->
+            new_score = Map.get(player, :score)
+            player = Map.put(player, :score, new_score + 1)
+            Map.put(player, :result, :blackjack)
+
           ## if dealer busts, everyone else who didn't bust wins
           dealer_hand_value > 21 ->
             new_score = Map.get(player, :score)
             player = Map.put(player, :score, new_score + 1)
             Map.put(player, :result, :win)
 
+          player_hand_value == dealer_hand_value ->
+            Map.put(player, :result, :push)
+
           # additional path for extra animations on blackjack
-          # player_hand_value == 21 ->
-          #   Map.put(player, :result, :blackjack)
 
           player_hand_value > dealer_hand_value ->
             new_score = Map.get(player, :score)
@@ -234,9 +240,6 @@ defmodule GameServer do
 
           player_hand_value < dealer_hand_value ->
             Map.put(player, :result, :lose)
-
-          player_hand_value == dealer_hand_value ->
-            Map.put(player, :result, :push)
 
           true ->
             Map.put(player, :result, nil)
