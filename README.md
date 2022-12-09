@@ -13,14 +13,13 @@ Now you can visit [`localhost:4000/`](http://localhost:4000) from your browser, 
 
 ## Introduction
 
-This is a simplified version of Multiplayer Blackjack game with the following features implemented:
+This is a simplified version of a Multiplayer Blackjack game with the following features implemented:
 
-* Multiplayer ability
 * Single Room
 * Can only seat up to 3 players
-* Any players that have taken a seat can click "start game" to start each game (This is different from traditional blackjack where we are not using any betting)
-* Players can choose to leave seat before a game round starts or after the game round ends
-* The Game round starts as soon as any seated player click Start Game
+* Players that have taken a seat can click "start game" to start each game round (This is different from traditional blackjack where we are not using any betting)
+* Players can choose to leave a seat before a game round starts or after the game round ends
+* The Game round starts as soon as any seated player clicks "start game"
 * Players and Dealer total rounds won is tracked and displayed in their respective areas
 
 ## Architecture
@@ -28,8 +27,8 @@ This is a simplified version of Multiplayer Blackjack game with the following fe
 ![link](./priv/static/images/blackjack_liveview_architecture.png)
 
 ## Sequence Diagram
-* Here's a simple sequence diagram that demonstrates the Hit action so we can see how each component interacts with each other. 
-* Ideally, as you can see in the diagram, once GameServer has updated the game state, it should send back a response with the new game state before the changes are broadcasted, but we've chosen to handle the update asynchronously for now and will update this in the future. Or have the GameServer broadcast the update instead. Either way is probably a better design thatn what we have right now. 
+* Here's a simple sequence diagram that demonstrates the Hit event so we can see how each component interacts with each other. 
+* Ideally, as you can see in the diagram, once GameServer has updated the game state, it should send back a response with the new game state before the changes are broadcasted, but we've chosen to handle the update asynchronously for now and will update this in the future. Alternatively, we could have the GameServer broadcast the update instead. Either way is probably a better design than what we have right now. 
 
 ![link](./priv/static/images/blackjack_liveview_hit_sequence_diagram.png)
 
@@ -97,6 +96,7 @@ Player
 4. Add Timer for when player needs to make hit or stand decisions
 5. Add Split to enable players to hold more than 1 hand
 6. Add hand total for Dealer
+7. In the event any server crashes, persist the data using ets_table or some data store
 
 ## Learn more About Phoenix
 
