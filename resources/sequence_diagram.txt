@@ -1,0 +1,24 @@
+title Blackjack Phoenix LiveView Sequence Diagram
+
+participant browser
+participant LiveView
+participant GameServer
+participant CardServer
+
+browser->LiveView:/blackjack_live
+LiveView->GameServer: GameServer.get_game_state()
+GameServer->LiveView: {:ok, game_state}
+LiveView->browser: render view
+
+browser->LiveView:click "hit"
+note over LiveView,GameServer:LiveView is going to have handle_event("hit")
+LiveView->GameServer:GameServer.hit(seat_id)
+
+GameServer->CardServer:CardServer.deal(1)
+CardServer->GameServer: {rank, suite}
+GameServer->GameServer: Game State updated
+LiveView->LiveView: Broadcast game state changes
+
+note over LiveView,GameServer:LiveView is going to have handle_info(event, ... socket) to update socket.assigns game_state and others
+LiveView->browser:Updated view rendered due to assign state changes
+
