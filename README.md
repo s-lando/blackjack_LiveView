@@ -38,7 +38,8 @@ This is a simplified version of a Multiplayer Blackjack game with the following 
 
 * This simple design gives us an idea of the flow of the game
 * Go here for the design 
-  * `./priv/static/design/simple_multiplayer_blackjack_design.pdf`
+  * [Link to design pdf](https://github.com/BCIT-PP-2022/blackjack_LiveView/blob/master/priv/static/design/simple_multiplayer_blackjack_design.pdf)
+  
 
 ## Data Structures for tracking Game_State, Card, and Player
 
