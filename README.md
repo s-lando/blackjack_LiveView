@@ -33,10 +33,13 @@ This is a simplified version of Multiplayer Blackjack game with the following fe
 
 ![link](./priv/static/images/blackjack_liveview_hit_sequence_diagram.png)
 
+**Note:** The sequence diagram is generated using this tool - sequencediagram.org, and the txt file is stored in `./resources`
+
 ## Frontend Design
 
 * This simple design gives us an idea of the flow of the game
-[./priv/static/resources/blackjack_live_view](design pdf)
+* Go here for the design 
+  * `./priv/static/design/simple_multiplayer_blackjack_design.pdf`
 
 ## Data Structures for tracking Game_State, Card, and Player
 
