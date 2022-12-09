@@ -1,5 +1,16 @@
 # Multiplayer Blackjack
 
+- [Multiplayer Blackjack](#multiplayer-blackjack)
+  - [Start Guide](#start-guide)
+  - [Introduction](#introduction)
+  - [Architecture](#architecture)
+  - [Sequence Diagram](#sequence-diagram)
+  - [Frontend Design](#frontend-design)
+  - [Data Structures for tracking Game\_State, Card, and Player](#data-structures-for-tracking-game_state-card-and-player)
+  - [Future Release](#future-release)
+  - [Learn more About Phoenix](#learn-more-about-phoenix)
+
+
 ## Start Guide
 
 To start your Phoenix server:
