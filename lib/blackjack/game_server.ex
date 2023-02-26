@@ -39,6 +39,10 @@ defmodule GameServer do
     GenServer.call(__MODULE__, :start_round)
   end
 
+  def deal() do
+    GenServer.call(__MODULE__, :deal)
+  end
+
   @impl true
   def init(nil) do
     game_state = %{

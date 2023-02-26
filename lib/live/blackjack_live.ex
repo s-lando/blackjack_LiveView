@@ -21,6 +21,13 @@ defmodule BlackjackWeb.BlackjackLive do
      )}
   end
 
+  # @impl true
+  # def handle_event("hit", %{"seatid" => seat_id}, socket) do
+  #   state = GameServer.hit(String.to_atom(seat_id))
+  #   BlackjackWeb.Endpoint.broadcast("game_state", "new_state", state)
+  #   {:noreply, socket}
+  # end
+
   @impl true
   def handle_event("hit", %{"seatid" => seat_id}, socket) do
     GameServer.hit(String.to_atom(seat_id))
@@ -78,6 +85,26 @@ defmodule BlackjackWeb.BlackjackLive do
     GameServer.start_round()
     BlackjackWeb.Endpoint.broadcast("game_state", "game_state_change", :game_state_change)
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{event: "new_state", payload: new_game_state}, socket) do
+    Logger.info("New state")
+    Logger.info(new_game_state)
+    player_seat = socket.assigns.seat
+    # result = Map.get(new_game_state, player_seat) |> Map.get(:result)
+
+    case new_game_state.game_in_progress do
+      true ->
+        {:noreply,
+         assign(socket, result: new_game_state[player_seat].result(game_state: new_game_state))}
+
+      false ->
+        BlackjackWeb.Endpoint.broadcast("game_state", "game_ended", new_game_state)
+
+        {:noreply,
+         assign(socket, result: new_game_state[player_seat].result(game_state: new_game_state))}
+    end
   end
 
   @impl true
